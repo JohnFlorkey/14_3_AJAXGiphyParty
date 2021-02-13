@@ -34,6 +34,7 @@ function removeGifs() {
 $('#btnSearch').on('click', function(e) {
     e.preventDefault(); 
     orchestrator($('#searchTerm').val());
+    $('#searchTerm').val('');
 })
 
 $('#btnRemoveGifs').on('click', function(e) {
