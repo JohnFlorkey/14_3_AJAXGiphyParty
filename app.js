@@ -10,21 +10,26 @@ async function orchestrator(searchTerm) {
 }
 
 async function searchGiphy(searchTerm) {
+    // construct params object for the get request
     const params = {'params': {
         'api_key': giphyAPIKey,
         'q': searchTerm,
-        'limit': 1
+        'limit': 1                  // returns only one search result
         }
     };
+
+    // make the API call
     searchResult = await axios.get(giphyAPISearchURL, params);
+
+    // return the url from the single search result
     return searchResult.data.data[0].images.downsized.url;
 }
 
 function addGifToDOM (url) {
-    $('<img>')
-        .attr('src', url)
-        .addClass('userGif')
-        .appendTo($('#userGifs'));
+    $('<img>')                          // create new img element
+        .attr('src', url)               // add the src attribute with the URL returned from the Giphy search
+        .addClass('userGif')            // add class to make the removal of all the gifs easier
+        .appendTo($('#userGifs'));      // append the img element to the userGifs div
 }
 
 function removeGifs() {
@@ -32,8 +37,13 @@ function removeGifs() {
 }
 
 $('#btnSearch').on('click', function(e) {
-    e.preventDefault(); 
+    // prevent submit action
+    e.preventDefault();
+
+    // collect the user input and kick off the rest of the rest of the process
     orchestrator($('#searchTerm').val());
+
+    // clear the text input
     $('#searchTerm').val('');
 })
 
