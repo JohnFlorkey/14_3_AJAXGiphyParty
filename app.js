@@ -18,17 +18,28 @@ async function searchGiphy(searchTerm) {
         }
     };
 
-    // make the API call
-    searchResult = await axios.get(giphyAPISearchURL, params);
-
+    try {
+        // make the API call
+        searchResult = await axios.get(giphyAPISearchURL, params);
+    }
+    catch (err) {
+        alert('Something went wrong')
+        return
+    }
     // return the url from the single search result
-    return searchResult.data.data[0].images.downsized.url;
+    if(searchResult.data.data.length > 0) {
+        return searchResult.data.data[0].images.original.url;
+    } else {
+        alert('Search returned no results');
+    }
 }
 
 function addGifToDOM (url) {
     $('<img>')                          // create new img element
         .attr('src', url)               // add the src attribute with the URL returned from the Giphy search
         .addClass('userGif')            // add class to make the removal of all the gifs easier
+        .addClass('m-2')                // add some margin
+        .addClass('rounded')            // round the corners
         .appendTo($('#userGifs'));      // append the img element to the userGifs div
 }
 
@@ -40,11 +51,15 @@ $('#btnSearch').on('click', function(e) {
     // prevent submit action
     e.preventDefault();
 
-    // collect the user input and kick off the rest of the rest of the process
-    orchestrator($('#searchTerm').val());
-
-    // clear the text input
-    $('#searchTerm').val('');
+    // validate there is some input
+    if($('#searchTerm').val()){
+        // collect the user input and kick off the rest of the rest of the process
+        orchestrator($('#searchTerm').val());
+        // clear the text input
+        $('#searchTerm').val('');
+    } else {
+        alert('A search term is required.')     // let the user know they need to add a search term
+    }
 })
 
 $('#btnRemoveGifs').on('click', function(e) {
