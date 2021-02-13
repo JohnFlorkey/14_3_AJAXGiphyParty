@@ -47,10 +47,7 @@ function removeGifs() {
     $('.userGif').remove();
 }
 
-$('#btnSearch').on('click', function(e) {
-    // prevent submit action
-    e.preventDefault();
-
+function submitForm(e) {
     // validate there is some input
     if($('#searchTerm').val()){
         // collect the user input and kick off the rest of the rest of the process
@@ -60,9 +57,21 @@ $('#btnSearch').on('click', function(e) {
     } else {
         alert('A search term is required.')     // let the user know they need to add a search term
     }
+}
+
+$('#btnSearch').on('click', (e) => {
+    // prevent submit action
+    e.preventDefault();
+    submitForm(e);
 })
 
-$('#btnRemoveGifs').on('click', function(e) {
+$('#searchTerm').on('keydown', (e) => {
+    if(e.keyCode === 13){
+        submitForm(e)
+    }
+})
+
+$('#btnRemoveGifs').on('click', (e) => {
     e.preventDefault();
     removeGifs();
 })
