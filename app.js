@@ -3,18 +3,23 @@ const giphyAPIKey = 'dwyh55BViwxuUaMfMYisdVuknAJiFqe8';
 
 async function orchestrator(searchTerm) {
     // perform the API search
-    const responseURL = await searchGiphy(searchTerm);
-
+    const arrURL = await searchGiphy(searchTerm);
+    // select a random GIF from the results
+    const responseURL = randomizeURL(arrURL);
     // add the GIF to the dom
     addGifToDOM(responseURL);
+}
+
+function randomizeURL(arrURL) {
+    const randomIndex = Math.floor(arrURL.length * Math.random())
+    return arrURL[randomIndex];
 }
 
 async function searchGiphy(searchTerm) {
     // construct params object for the get request
     const params = {'params': {
         'api_key': giphyAPIKey,
-        'q': searchTerm,
-        'limit': 1                  // returns only one search result
+        'q': searchTerm
         }
     };
 
@@ -26,9 +31,10 @@ async function searchGiphy(searchTerm) {
         alert('Something went wrong')
         return
     }
-    // return the url from the single search result
+    // check that response contains at least one URL
     if(searchResult.data.data.length > 0) {
-        return searchResult.data.data[0].images.original.url;
+        // return an array of URL's for the original size and quality GIF's
+        return searchResult.data.data.map((result) => result.images.original.url);
     } else {
         alert('Search returned no results');
     }
