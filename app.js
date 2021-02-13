@@ -4,6 +4,8 @@ const giphyAPIKey = 'dwyh55BViwxuUaMfMYisdVuknAJiFqe8';
 async function orchestrator(searchTerm) {
     // perform the API search
     const responseURL = await searchGiphy(searchTerm);
+
+    // add the GIF to the dom
     addGifToDOM(responseURL);
 }
 
@@ -19,10 +21,22 @@ async function searchGiphy(searchTerm) {
 }
 
 function addGifToDOM (url) {
-    $('<img>').attr('src', url).appendTo($('#userGifs'));
+    $('<img>')
+        .attr('src', url)
+        .addClass('userGif')
+        .appendTo($('#userGifs'));
+}
+
+function removeGifs() {
+    $('.userGif').remove();
 }
 
 $('#btnSearch').on('click', function(e) {
     e.preventDefault(); 
     orchestrator($('#searchTerm').val());
+})
+
+$('#btnRemoveGifs').on('click', function(e) {
+    e.preventDefault();
+    removeGifs();
 })
